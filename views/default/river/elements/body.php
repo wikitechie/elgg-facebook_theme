@@ -8,6 +8,7 @@
  * @uses $vars['attachments'] Optional attachments (displaying icons or other non-text data)
  * @uses $vars['responses']   Alternate respones (comments, replies, etc.)
  */
+elgg_load_library("ArPHP:ArIdentifier");
 
 $item = $vars['item'];
 
@@ -31,7 +32,9 @@ if ($summary === false) {
 
 $message = elgg_extract('message', $vars, false);
 if ($message !== false) {
-	$message = "<div class=\"elgg-river-message\">$message</div>";
+	$dir = ArIdentifier::getTextDirection($message);
+	$style = "direction:$dir;";
+	$message = "<div class=\"elgg-river-message\" style=\"$style\">$message</div>";
 }
 
 $attachments = elgg_extract('attachments', $vars, false);
