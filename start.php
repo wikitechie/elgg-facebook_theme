@@ -39,6 +39,9 @@ function facebook_theme_init() {
 	 */
 	//Small "correction" to groups profile -- brief description makes more sense to come first!
 	elgg_register_plugin_hook_handler('profile:fields', 'group', 'facebook_theme_group_profile_fields', 1);
+	
+	elgg_register_js("sw:browser", "mod/socialwiki/js/social_browser.js");
+	elgg_load_js("sw:diff");
 		
 	//@todo report some of the extra patterns to be included in Elgg core
 	elgg_extend_view('css/elgg', 'facebook_theme/css');

@@ -26,8 +26,15 @@ if (!$activity) {
 	$activity = elgg_view('output/longtext', array('value' => elgg_echo('wiki:activity:none')));
 }
 
+$button = elgg_view('output/url', array(
+	'href'=>'wiki/social_browser',
+	'text'=>'Social Broswer',
+	'class'=>'elgg-button',
+	
+));
+
 $body = elgg_view_layout('two_sidebar', array(
-	'content' => $composer . $activity,
+	'content' => "<p align=center>".$button."</p>".$composer . $activity,
 	'title' => $title,
 ));
 
