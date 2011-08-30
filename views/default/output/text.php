@@ -12,10 +12,7 @@
 elgg_load_library("ArPHP:ArIdentifier");
 $str = htmlspecialchars($vars['value'], ENT_QUOTES, 'UTF-8', false);
 $obj = new ArIdentifier();
-$pos   = $obj->identify($str);
-
-if ( (!empty($pos)) && ($pos[0] == 0)){
-	$style .= 'direction:rtl;';
-}
+$dir = ArIdentifier::getTextDirection($str);
+$style = "direction:$dir;";
 
 echo "<span style='{$style}'>$str</span>";

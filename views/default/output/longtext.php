@@ -32,13 +32,10 @@ if ($parse_urls) {
 }
 
 // solving rtl problems
-$str = $text;
-$obj = new ArIdentifier();
-$pos   = $obj->identify($str);
+$dir = ArIdentifier::getTextDirection($text);
+$style = ";direction:$dir;";
+$vars['style'] .= $style;
 
-if ( (!empty($pos)) && ($pos[0] == 0)){
-	$vars['style'] .= '; direction:rtl;';
-}
 $attributes = elgg_format_attributes($vars);
 $text = autop($text);
 echo "<div $attributes>$text</div>";

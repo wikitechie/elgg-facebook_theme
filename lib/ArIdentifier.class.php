@@ -26,7 +26,7 @@
 // ----------------------------------------------------------------------
 
 class ArIdentifier {
-      function identify($str){
+      static function identify($str){
           $minAr  = 55436;
           $maxAr  = 55698;
           $probAr = false;
@@ -76,6 +76,20 @@ class ArIdentifier {
       
           return $ArRef;
       }
-
+      /**
+       * 
+       * gets Best Text Direction
+       * @param string $str
+       * @return string
+       */
+      static function getTextDirection($str){
+      	$pos   = ArIdentifier::identify($str);
+      	$dir = ltr;
+      	if ( (!empty($pos)) && ($pos[0] == 0)){
+      		$dir = 'rtl';
+      	}
+      	return $dir;
+      }
+	
 }
 ?>
