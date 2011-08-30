@@ -57,6 +57,9 @@ function facebook_theme_init() {
 		elgg_extend_view('page/elements/topbar', 'search/search_box');
 		elgg_unextend_view('page/elements/header', 'search/search_box');
 	}
+	
+	// registering some libs
+	elgg_register_library("ArPHP:ArIdentifier", elgg_get_plugins_path() . "elgg-facebook_theme/lib/ArIdentifier.class.php");
 }
 
 function facebook_theme_groups_page_handler($segments, $handle) {
