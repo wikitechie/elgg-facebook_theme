@@ -9,9 +9,12 @@ function facebook_theme_init() {
 	elgg_register_page_handler('dashboard', 'facebook_theme_dashboard_handler');
 	
 	//What a hack!  Overriding groups page handler without blowing away other plugins doing the same
-	global $CONFIG, $facebook_theme_original_groups_page_handler;
+	global $CONFIG, $facebook_theme_original_groups_page_handler, $facebook_theme_original_wiki_page_handler;
 	$facebook_theme_original_groups_page_handler = $CONFIG->pagehandler['groups'];
+	$facebook_theme_original_wiki_page_handler = $CONFIG->pagehandler['wiki'];
 	elgg_register_page_handler('groups', 'facebook_theme_groups_page_handler');
+	elgg_register_page_handler('wiki', 'facebook_theme_wiki_page_handler');
+	
 	
 	/**
 	 * Customize menus
@@ -74,6 +77,24 @@ function facebook_theme_groups_page_handler($segments, $handle) {
 	}
 }
 
+function facebook_theme_wiki_page_handler($segments, $handle) {
+	$pages_dir = dirname(__FILE__) . '/pages';
+
+	switch ($segments[0]) {
+		case 'profile':
+			elgg_set_page_owner_guid($segments[1]);
+			require_once "$pages_dir/wiki/wall.php";
+			return true;
+		case 'info':
+			elgg_set_page_owner_guid($segments[1]);
+			require_once "$pages_dir/wiki/info.php";
+			return true;
+		default:
+			global $facebook_theme_original_wiki_page_handler;
+			return call_user_func($facebook_theme_original_wiki_page_handler, $segments, $handle);
+	}
+}
+
 function facebook_theme_pagesetup_handler() {
 	$owner = elgg_get_page_owner_entity();
 
@@ -94,7 +115,8 @@ function facebook_theme_pagesetup_handler() {
 			'priority' => 500,
 			'contexts' => array('dashboard'),
 		));
-	
+		
+			
 		if ($owner instanceof ElggUser && $owner->guid != $user->guid) {
 			
 			if (check_entity_relationship($user->guid, 'friend', $owner->guid)) {
@@ -138,6 +160,30 @@ function facebook_theme_pagesetup_handler() {
 			));
 		}
 		
+		//socialwiki plugin
+		if (elgg_is_active_plugin('socialwiki')) {
+
+		elgg_register_menu_item('page', array(
+			'section' => 'wikis',	
+			'name' => 'wikis',
+			'text' => elgg_echo('socialwiki:wikis'),
+			'href' => "/wiki/all",
+			'contexts' => array('dashboard'),
+			'priority' => 300,
+		
+		));
+		
+		elgg_register_menu_item('page', array(
+			'name' => 'wikis-add',
+			'section' => 'wikis',
+			'text' => elgg_echo('wiki:add'),
+			'href' => "/wiki/add",
+			'contexts' => array('dashboard'),
+			'priority' => 301,
+		));
+		
+		}
+		
 		if (elgg_is_active_plugin('groups')) {
 			$groups = $user->getGroups('', 4);
 			
@@ -157,7 +203,7 @@ function facebook_theme_pagesetup_handler() {
 				'text' => elgg_echo('groups:add'),
 				'href' => "/groups/add",
 				'contexts' => array('dashboard'),
-				'priority' => 499,
+				'priority' => 200,
 			));
 			
 			elgg_register_menu_item('page', array(
@@ -166,7 +212,7 @@ function facebook_theme_pagesetup_handler() {
 				'text' => elgg_echo('See All'),
 				'href' => "/groups/member/$user->username",
 				'contexts' => array('dashboard'),
-				'priority' => 500,
+				'priority' => 201,
 			));
 		}
 		
@@ -209,6 +255,8 @@ function facebook_theme_pagesetup_handler() {
 				'contexts' => array('dashboard'),
 			));
 		}
+		
+
 		
 		if (elgg_is_active_plugin('messages')) {
 			elgg_register_menu_item('page', array(
@@ -268,13 +316,13 @@ function facebook_theme_pagesetup_handler() {
 			'priority' => 1000,
 		));
 
-		elgg_register_menu_item('topbar', array(
+/*		elgg_register_menu_item('topbar', array(
 			'name' => 'home',
 			'href' => '/dashboard',
 			'text' => elgg_echo('home'),
 			'section' => 'alt',
 			'priority' => 1,
-		));
+		));*/
 		
 		if (elgg_is_active_plugin('profile')) {
 			elgg_unregister_menu_item('topbar', 'profile');
@@ -459,7 +507,7 @@ function facebook_theme_group_profile_fields($hook, $type, $fields, $params) {
 
 function facebook_theme_owner_block_menu_handler($hook, $type, $items, $params) {
 	$owner = elgg_get_page_owner_entity();
-	
+
 	if ($owner instanceof ElggGroup) {
 		$items['info'] = ElggMenuItem::factory(array(
 			'name' => 'info', 
@@ -475,6 +523,23 @@ function facebook_theme_owner_block_menu_handler($hook, $type, $items, $params) 
 			'priority' => 1,
 		));
 	}
+	
+	if(get_subtype_from_id($owner->subtype) == 'wiki'){
+		$items['info'] = ElggMenuItem::factory(array(
+			'name' => 'info', 
+			'text' => elgg_echo('profile:info'), 
+			'href' => "/wiki/info/$owner->guid/" . elgg_get_friendly_title($owner->name),
+			'priority' => 2,
+		));
+		
+		$items['profile'] = ElggMenuItem::factory(array(
+			'name' => 'profile',
+			'text' => elgg_view_icon('speech-bubble') . elgg_echo('profile:wall'),
+			'href' => "/wiki/profile/$owner->guid/" . elgg_get_friendly_title($owner->name),
+			'priority' => 1,
+		));
+	}
+	
 	
 	if ($owner instanceof ElggUser) {
 		$items['info'] = ElggMenuItem::factory(array(

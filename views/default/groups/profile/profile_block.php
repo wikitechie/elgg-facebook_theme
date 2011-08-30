@@ -19,7 +19,7 @@ $profile_fields = elgg_get_config('group');
 
 ?>
 <div class="groups-profile clearfix">
-	<div class="groups-profile-fields elgg-body">
+	<div class="groups-profile-fields elgg-body"><!--
 		<p>
 			<b><?php echo elgg_echo("groups:owner"); ?>: </b>
 			<?php
