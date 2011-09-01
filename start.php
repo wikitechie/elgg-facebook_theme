@@ -63,6 +63,10 @@ function facebook_theme_init() {
 	
 	// registering some libs
 	elgg_register_library("ArPHP:ArIdentifier", elgg_get_plugins_path() . "elgg-facebook_theme/lib/ArIdentifier.class.php");
+	elgg_register_js("jquery:ui",elgg_get_plugins_path() . "elgg-facebook_theme/js/jquery-ui-1.8.16.custom.min.js");
+	elgg_load_js("jquery:ui");
+	elgg_register_css("jquery-ui:redmond", "mod/elgg-facebook_theme/graphics/redmond/jquery-ui-1.8.16.custom.css");
+	elgg_load_css("jquery-ui:redmond");
 }
 
 function facebook_theme_groups_page_handler($segments, $handle) {

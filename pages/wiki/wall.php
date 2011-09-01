@@ -27,7 +27,8 @@ if (!$activity) {
 }
 
 $button = elgg_view('output/url', array(
-	'href'=>'wiki/social_browser',
+	'href'=>'#socialBrowser',
+	'rel'=>'modal',
 	'text'=>'Social Broswer',
 	'class'=>'elgg-button',
 	
@@ -39,3 +40,4 @@ $body = elgg_view_layout('two_sidebar', array(
 ));
 
 echo elgg_view_page($title, $body);
+echo "<div class='jq-dialog' title='Social Browser - {$wiki->title}' src='{$wiki->url}'></div>";
