@@ -403,6 +403,14 @@ function facebook_theme_container_permissions_handler($hook, $type, $result, $pa
 			return false;
 		}
 	}
+
+	if (get_subtype_from_id($container->subtype) == 'wiki') {
+		if ($subtype == 'thewire') {
+			return false;
+		}
+	}
+
+
 }
 
 function facebook_theme_annotation_permissions_handler($hook, $type, $result, $params) {

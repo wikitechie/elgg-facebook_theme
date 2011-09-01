@@ -10,17 +10,17 @@ if (elgg_is_logged_in()) {
 }
 
 $db_prefix = elgg_get_config('dbprefix');
-/*$activity = elgg_list_river(array(
+$activity = elgg_list_river(array(
 	'joins' => array("JOIN {$db_prefix}entities e ON e.guid = rv.object_guid"),
 	'wheres' => array("e.container_guid = $wiki->guid OR rv.object_guid = $wiki->guid"),
-));*/
+));
 
-$activity = elgg_list_river(array(
+/*$activity = elgg_list_river(array(
 		'relationship'         => NULL,
 		'relationship_guid'    => NULL,
 		'inverse_relationship' => FALSE,
 		'subtypes'             => 'wikiactivity',		
-	));
+	));*/
 
 if (!$activity) {
 	$activity = elgg_view('output/longtext', array('value' => elgg_echo('wiki:activity:none')));
