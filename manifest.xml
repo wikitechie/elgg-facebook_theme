@@ -40,6 +40,11 @@
 		<priority>after</priority>
 		<plugin>thewire</plugin>
 	</requires>
+	<requires>
+		<type>priority</type>
+		<priority>after</priority>
+		<plugin>socialwiki</plugin>
+	</requires>
 	
 	<suggests>
 		<type>plugin</type>
