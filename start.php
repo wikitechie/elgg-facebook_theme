@@ -26,6 +26,8 @@ function facebook_theme_init() {
 	elgg_register_plugin_hook_handler('register', 'menu:owner_block', 'facebook_theme_owner_block_menu_handler', 600);
 	elgg_register_plugin_hook_handler('register', 'menu:composer', 'facebook_theme_composer_menu_handler');
 	
+	elgg_register_plugin_hook_handler('action', 'thewire/add', 'facebook_theme_thewire_extender');
+	
 	elgg_register_event_handler('pagesetup', 'system', 'facebook_theme_pagesetup_handler', 1000);
 	
 	/**
@@ -399,13 +401,13 @@ function facebook_theme_container_permissions_handler($hook, $type, $result, $pa
 	$subtype = $params['subtype'];
 	
 	if ($container instanceof ElggGroup) {
-		if ($subtype == 'thewire') {
+		if ($subtype == 'messageboard') {
 			return false;
 		}
 	}
 
 	if (get_subtype_from_id($container->subtype) == 'wiki') {
-		if ($subtype == 'thewire') {
+		if ($subtype == 'messageboard') {
 			return false;
 		}
 	}
@@ -444,6 +446,32 @@ function facebook_theme_annotation_permissions_handler($hook, $type, $result, $p
 }
 
 /**
+ * Allows containers (such as groups) to post to the wire, 
+ * and to assign its guid as the posts container_guid
+ * 
+ * @todo Move the implementation code from the action file
+ */
+
+function facebook_theme_thewire_extender($hook, $type, $items, $params){
+	
+/*	This code should be moved from thewire/action/add.php
+ * 	I was not able to move it here since we need the guid of the wire post
+ * 
+ 
+	$container_guid = (int) get_input('container_guid');
+	
+	$guid = thewire_save_post($body, get_loggedin_userid(), $access_id, $parent_guid, $method);
+
+
+	if ($container_guid){
+		$post = get_entity($guid);
+		$post->container_guid = $container_guid;
+		$post->save();
+	}
+	*/
+}
+
+/**
  * Adds menu items to the "composer" at the top of the "wall".  Need to also add
  * the forms that these items point to.
  * 
@@ -451,20 +479,25 @@ function facebook_theme_annotation_permissions_handler($hook, $type, $result, $p
  */
 function facebook_theme_composer_menu_handler($hook, $type, $items, $params) {
 	$entity = $params['entity'];
-	
+
 	if (elgg_is_active_plugin('thewire') && $entity->canWriteToContainer(0, 'object', 'thewire')) {
+		if(!($entity instanceof ElggUser))
+			$text = elgg_view_icon('speech-bubble-alt') . elgg_echo("composer:annotation:messageboard");
+		else 
+			$text = elgg_view_icon('share') . elgg_echo("composer:object:thewire");
+			
 		$items[] = ElggMenuItem::factory(array(
 			'name' => 'thewire',
 			'href' => "/ajax/view/thewire/composer?container_guid=$entity->guid",
-			'text' => elgg_view_icon('share') . elgg_echo("composer:object:thewire"),
+			'text' => $text,
 			'priority' => 100,
 		));
 		
 		//trigger any javascript loads that we might need
-		elgg_view('thewire/composer');
+		elgg_view('thewire/composer', array('amjad'=> 'amjad'));
 	}
 	
-	if (elgg_is_active_plugin('messageboard') && $entity->canAnnotate(0, 'messageboard')) {
+/*	if (elgg_is_active_plugin('messageboard') && $entity->canAnnotate(0, 'messageboard')) {
 		$items[] = ElggMenuItem::factory(array(
 			'name' => 'messageboard',
 			'href' => "/ajax/view/messageboard/composer?entity_guid=$entity->guid",
@@ -475,7 +508,7 @@ function facebook_theme_composer_menu_handler($hook, $type, $items, $params) {
 		//trigger any javascript loads that we might need
 		elgg_view('messageboard/composer');
 	}
-	
+	*/
 	if (elgg_is_active_plugin('bookmarks') && $entity->canWriteToContainer(0, 'object', 'bookmarks')) {
 		$items[] = ElggMenuItem::factory(array(
 			'name' => 'bookmarks',

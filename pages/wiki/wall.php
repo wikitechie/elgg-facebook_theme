@@ -30,7 +30,15 @@ elgg_register_menu_item('title', array(
 	'name' => 'socialbrowser',
 	'href' => "#socialBrowser",				
 	'text' => 'Social Broswer',
-	'link_class' => 'elgg-button elgg-button-action',
+	'link_class' => 'elgg-button elgg-button-special',
+
+));
+
+elgg_register_menu_item('title', array(
+	'name' => 'mywikiusers',
+	'href' => 'wikiuser',				
+	'text' => 'My users',
+	'link_class' => 'elgg-button',
 
 ));
 
