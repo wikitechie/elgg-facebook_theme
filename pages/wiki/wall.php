@@ -26,18 +26,16 @@ if (!$activity) {
 	$activity = elgg_view('output/longtext', array('value' => elgg_echo('wiki:activity:none')));
 }
 
-$button = elgg_view('output/url', array(
-	'href'=>'#socialBrowser',
-	'rel'=>'modal',
-	'text'=>'Social Broswer',
-	'class'=>'elgg-button',
-	
+elgg_register_menu_item('title', array(
+	'name' => 'socialbrowser',
+	'href' => "#socialBrowser",				
+	'text' => 'Social Broswer',
+	'link_class' => 'elgg-button elgg-button-action',
+
 ));
-elgg_register_title_button('wiki','socialbrowser');
-elgg_register_title_button('wiki','mywikiusers');
 
 $body = elgg_view_layout('two_sidebar', array(
-	'content' => "<p align=center>".$button."</p>".$composer . $activity,
+	'content' => $composer . $activity,
 	'title' => $title,
 ));
 
