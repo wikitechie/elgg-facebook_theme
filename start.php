@@ -8,6 +8,8 @@ function facebook_theme_init() {
 	elgg_register_page_handler('profile', 'facebook_theme_profile_page_handler');
 	elgg_register_page_handler('dashboard', 'facebook_theme_dashboard_handler');
 	
+	elgg_register_action('thewire/add',dirname(__FILE__) . "/actions/thewire/add.php");
+	
 	//What a hack!  Overriding groups page handler without blowing away other plugins doing the same
 	global $CONFIG, $facebook_theme_original_groups_page_handler, $facebook_theme_original_wiki_page_handler;
 	$facebook_theme_original_groups_page_handler = $CONFIG->pagehandler['groups'];
