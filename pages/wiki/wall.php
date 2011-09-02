@@ -33,6 +33,8 @@ $button = elgg_view('output/url', array(
 	'class'=>'elgg-button',
 	
 ));
+elgg_register_title_button('wiki','socialbrowser');
+elgg_register_title_button('wiki','mywikiusers');
 
 $body = elgg_view_layout('two_sidebar', array(
 	'content' => "<p align=center>".$button."</p>".$composer . $activity,
