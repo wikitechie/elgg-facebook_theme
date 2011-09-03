@@ -409,9 +409,16 @@ function facebook_theme_container_permissions_handler($hook, $type, $result, $pa
 	}
 
 	if (get_subtype_from_id($container->subtype) == 'wiki') {
-		if ($subtype == 'messageboard') {
+		if(!elgg_is_logged_in())
 			return false;
+		else {			
+			if ($subtype == 'messageboard') 
+				return false;
+			else
+				return true;
 		}
+		
+
 	}
 
 
