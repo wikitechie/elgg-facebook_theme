@@ -409,9 +409,7 @@ function facebook_theme_container_permissions_handler($hook, $type, $result, $pa
 	}
 
 	if (get_subtype_from_id($container->subtype) == 'wiki') {
-		if(!elgg_is_logged_in())
-			return false;
-		else {			
+		if(elgg_is_logged_in() || elgg_get_context() == 'socialwiki_cron') {			
 			if ($subtype == 'messageboard') 
 				return false;
 			else
@@ -598,6 +596,11 @@ function facebook_theme_owner_block_menu_handler($hook, $type, $items, $params) 
 			'href' => "/wiki/profile/$owner->guid/" . elgg_get_friendly_title($owner->name),
 			'priority' => 1,
 		));
+		
+		foreach($items as $key => $item){
+			if(in_array($item->getName(), array('blog','file','pages','bookmarks')))					
+				;//unset($items[$key]);
+		}
 	}
 	
 	
