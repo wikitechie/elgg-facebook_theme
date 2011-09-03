@@ -44,7 +44,7 @@ img {max-width:100%}
 	font-size: 20px;
 	color: white;
 	text-shadow: 0px 0px 1px lightBlue;
-	width: 100px;
+	/*width: 100px;*/
 	text-align:center;
 }
 
