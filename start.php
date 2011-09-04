@@ -409,9 +409,9 @@ function facebook_theme_container_permissions_handler($hook, $type, $result, $pa
 	}
 
 	if (get_subtype_from_id($container->subtype) == 'wiki') {
-		if(elgg_is_logged_in() || elgg_get_context() == 'socialwiki_cron') {			
+		if(elgg_get_context() == 'cron_wiki_update') {			
 			if ($subtype == 'messageboard') 
-				return false;
+				return $result;
 			else
 				return true;
 		}
