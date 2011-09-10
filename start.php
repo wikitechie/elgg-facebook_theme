@@ -75,6 +75,7 @@ function facebook_theme_init() {
 	elgg_register_js("elgg:ajax",elgg_get_plugins_path() . "elgg-facebook_theme/js/ajax.js");
 	elgg_load_js("elgg:ajax");
 	#TODO make js loading in the right place
+
 }
 
 function facebook_theme_groups_page_handler($segments, $handle) {
@@ -413,13 +414,12 @@ function facebook_theme_container_permissions_handler($hook, $type, $result, $pa
 	}
 
 	if (get_subtype_from_id($container->subtype) == 'wiki') {
-		if(elgg_is_logged_in() || elgg_get_context() == 'socialwiki_cron') {			
-			if ($subtype == 'messageboard') 
-				return false;
-			else
-				return true;
+		if (elgg_is_logged_in() && $subtype=='thewire'){
+			return true;
 		}
-		
+		else{
+			return $result;
+		}
 
 	}
 
