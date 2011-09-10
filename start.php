@@ -70,7 +70,11 @@ function facebook_theme_init() {
 	elgg_register_js("jquery:ui",elgg_get_plugins_path() . "elgg-facebook_theme/js/jquery-ui-1.8.16.custom.min.js");
 	elgg_load_js("jquery:ui");
 	elgg_register_css("jquery-ui:redmond", "mod/elgg-facebook_theme/graphics/redmond/jquery-ui-1.8.16.custom.css");
-	elgg_load_css("jquery-ui:redmond");
+	//elgg_load_css("jquery-ui:redmond");
+	
+	elgg_register_js("elgg:ajax",elgg_get_plugins_path() . "elgg-facebook_theme/js/ajax.js");
+	elgg_load_js("elgg:ajax");
+	#TODO make js loading in the right place
 }
 
 function facebook_theme_groups_page_handler($segments, $handle) {
