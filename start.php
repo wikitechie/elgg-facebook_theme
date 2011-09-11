@@ -67,10 +67,16 @@ function facebook_theme_init() {
 	
 	// registering some libs
 	elgg_register_library("ArPHP:ArIdentifier", elgg_get_plugins_path() . "elgg-facebook_theme/lib/ArIdentifier.class.php");
-	//elgg_register_js("jquery:ui",elgg_get_plugins_path() . "elgg-facebook_theme/js/jquery-ui-1.8.16.custom.min.js");
-	//elgg_load_js("jquery:ui");
-	//elgg_register_css("jquery-ui:redmond", "mod/elgg-facebook_theme/graphics/redmond/jquery-ui-1.8.16.custom.css");
+
+	elgg_register_js("jquery:ui",elgg_get_plugins_path() . "elgg-facebook_theme/js/jquery-ui-1.8.16.custom.min.js");
+	elgg_load_js("jquery:ui");
+	elgg_register_css("jquery-ui:redmond", "mod/elgg-facebook_theme/graphics/redmond/jquery-ui-1.8.16.custom.css");
 	//elgg_load_css("jquery-ui:redmond");
+	
+	elgg_register_js("elgg:ajax",elgg_get_plugins_path() . "elgg-facebook_theme/js/ajax.js");
+	elgg_load_js("elgg:ajax");
+	#TODO make js loading in the right place
+
 }
 
 function facebook_theme_groups_page_handler($segments, $handle) {
@@ -409,13 +415,12 @@ function facebook_theme_container_permissions_handler($hook, $type, $result, $pa
 	}
 
 	if (get_subtype_from_id($container->subtype) == 'wiki') {
-		if(elgg_is_logged_in() || elgg_get_context() == 'socialwiki_cron') {			
-			if ($subtype == 'messageboard') 
-				return false;
-			else
-				return true;
+		if (elgg_is_logged_in() && $subtype=='thewire'){
+			return true;
 		}
-		
+		else{
+			return $result;
+		}
 
 	}
 
