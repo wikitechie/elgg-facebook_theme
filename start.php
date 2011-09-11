@@ -674,7 +674,7 @@ function facebook_theme_river_menu_handler($hook, $type, $items, $params) {
 	$item = $params['item'];
 
 	$object = $item->getObjectEntity();
-	if (!elgg_in_context('widgets') && !$item->annotation_id && $object instanceof ElggEntity) {
+	if (!$item->annotation_id && $object instanceof ElggEntity) {
 		
 		if (elgg_is_active_plugin('likes') && $object->canAnnotate(0, 'likes')) {
 			if (!elgg_annotation_exists($object->getGUID(), 'likes')) {
