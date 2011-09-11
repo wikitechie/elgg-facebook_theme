@@ -187,16 +187,16 @@ function facebook_theme_pagesetup_handler() {
 				'type'		=> 'object',
 				'subtype'	=> 'wiki',
 				'relationshiop' => 'wiki_father',
-				'relationship_guid' => $user->guid,				
+				'relationship_guid' => $user->guid,	
+				'inverse_relationship'=> true,				
 			);
 			
 			$wikis  = elgg_get_entities_from_relationship($options);
-				
-			
-			foreach ($wikis as $wiki) {
+						
+			foreach ($wikis as $wiki) {				
 				elgg_register_menu_item('page', array(
 					'section' => 'wikis',
-					'name' => "wiki-$group->guid",
+					'name' => "wiki-$wiki->guid",
 					'text' => $wiki->title,
 					'href' => $wiki->getURL(),
 					'contexts' => array('dashboard'),
@@ -206,7 +206,7 @@ function facebook_theme_pagesetup_handler() {
 			elgg_register_menu_item('page', array(
 				'section' => 'wikis',	
 				'name' => 'wikis',
-				'text' => "All wikis",
+				'text' => "See all",
 				'href' => "/wiki/all",
 				'contexts' => array('dashboard'),
 				'priority' => 301,
@@ -225,7 +225,7 @@ function facebook_theme_pagesetup_handler() {
 		}
 		
 		if (elgg_is_active_plugin('groups')) {
-			$groups = $user->getGroups('', 4);
+			$groups = $user->getGroups('');
 			
 			foreach ($groups as $group) {
 				elgg_register_menu_item('page', array(
