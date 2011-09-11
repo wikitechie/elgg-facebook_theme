@@ -19,8 +19,10 @@ elgg.view = function(name, options) {
 	var url = elgg.normalize_url('ajax/view/'+name);
 	if (elgg.isNullOrUndefined(options.success)) {
 		options.manipulationMethod = options.manipulationMethod || 'html';
+		var custom_success = options.success || elgg.nullFunction;
 		options.success = function(data) {
 			$(options.target)[options.manipulationMethod](data);
+			custom_success(data);
 		};
 	}
 	elgg.get(url, options);
