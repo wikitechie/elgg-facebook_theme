@@ -67,6 +67,7 @@ function facebook_theme_init() {
 	
 	// registering some libs
 	elgg_register_library("ArPHP:ArIdentifier", elgg_get_plugins_path() . "elgg-facebook_theme/lib/ArIdentifier.class.php");
+
 	elgg_register_js("jquery:ui",elgg_get_plugins_path() . "elgg-facebook_theme/js/jquery-ui-1.8.16.custom.min.js");
 	elgg_load_js("jquery:ui");
 	elgg_register_css("jquery-ui:redmond", "mod/elgg-facebook_theme/graphics/redmond/jquery-ui-1.8.16.custom.css");
@@ -181,14 +182,34 @@ function facebook_theme_pagesetup_handler() {
 		
 		//socialwiki plugin
 		if (elgg_is_active_plugin('socialwiki')) {
+			
+			$options = array(
+				'type'		=> 'object',
+				'subtype'	=> 'wiki',
+				'relationshiop' => 'wiki_father',
+				'relationship_guid' => $user->guid,	
+				'inverse_relationship'=> true,				
+			);
+			
+			$wikis  = elgg_get_entities_from_relationship($options);
+						
+			foreach ($wikis as $wiki) {				
+				elgg_register_menu_item('page', array(
+					'section' => 'wikis',
+					'name' => "wiki-$wiki->guid",
+					'text' => $wiki->title,
+					'href' => $wiki->getURL(),
+					'contexts' => array('dashboard'),
+				));
+			}
 
 			elgg_register_menu_item('page', array(
 				'section' => 'wikis',	
 				'name' => 'wikis',
-				'text' => elgg_echo('socialwiki:wikis'),
+				'text' => "See all",
 				'href' => "/wiki/all",
 				'contexts' => array('dashboard'),
-				'priority' => 300,
+				'priority' => 301,
 			
 			));
 			
@@ -198,13 +219,13 @@ function facebook_theme_pagesetup_handler() {
 				'text' => elgg_echo('wiki:add'),
 				'href' => "/wiki/add",
 				'contexts' => array('dashboard'),
-				'priority' => 301,
+				'priority' => 300,
 			));
 		
 		}
 		
 		if (elgg_is_active_plugin('groups')) {
-			$groups = $user->getGroups('', 4);
+			$groups = $user->getGroups('');
 			
 			foreach ($groups as $group) {
 				elgg_register_menu_item('page', array(
@@ -228,7 +249,7 @@ function facebook_theme_pagesetup_handler() {
 			elgg_register_menu_item('page', array(
 				'section' => 'groups',
 				'name' => 'groups',
-				'text' => elgg_echo('See All'),
+				'text' => elgg_echo('see:all'),
 				'href' => "/groups/member/$user->username",
 				'contexts' => array('dashboard'),
 				'priority' => 201,
@@ -387,7 +408,7 @@ function facebook_theme_pagesetup_handler() {
 	
 	elgg_register_menu_item('extras', array(
 		'name' => 'rss',
-		'text' => elgg_view_icon('rss') . elgg_echo("Subscribe via RSS"),
+		'text' => elgg_view_icon('rss') . elgg_echo("rss:subscribe"),
 		'href' => '?view=rss',
 	));
 }

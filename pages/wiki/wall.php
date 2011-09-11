@@ -34,13 +34,51 @@ elgg_register_menu_item('title', array(
 
 ));
 
-elgg_register_menu_item('title', array(
-	'name' => 'mywikiusers',
-	'href' => 'wikiuser',				
-	'text' => 'My users',
-	'link_class' => 'elgg-button',
+if (elgg_is_logged_in()){
+	$user_guid = elgg_get_logged_in_user_guid();
+	
+	$options = array(
+		'type'		=> 'object',
+		'subtype'	=> 'wikiuser',		
+		'relationshiop' => 'wiki_member',
+		'relationship_guid' => $wiki->guid,
+		'inverse_relationship'=> true,					
+	);
+	
+	$wikiusers = elgg_get_entities_from_relationship($options);	
+		
+	foreach($wikiusers as $wikiuser){
+		if($wikiuser->owner_guid == $user_guid )
+			$mywikiuser = $wikiuser;
+	}
+	
+	if (!$mywikiuser)	
+		elgg_register_menu_item('title', array(
+			'name' => 'connectwikiuser',
+			'href' => "wikiuser/add/$user_guid/$wiki->guid",				
+			'text' => "Connect my account",
+			'link_class' => 'elgg-button',
+		
+		));
+	else {
+		elgg_register_menu_item('title', array(
+			'name' => 'editwikiuser',
+			'href' => "wikiuser/edit/".$mywikiuser->guid,				
+			'text' => "Edit my account",
+			'link_class' => 'elgg-button',
+		
+		));
+		elgg_register_menu_item('title', array(
+			'name' => 'deletewikiuser',
+			'href' => elgg_add_action_tokens_to_url("/action/wikiuser/delete?guid=".$mywikiuser->guid, false),				
+			'text' => "Disconnect my account",
+			'link_class' => 'elgg-button elgg-button-delete elgg-button-action',
+		
+		));
+	}
+	
+}
 
-));
 
 $body = elgg_view_layout('two_sidebar', array(
 	'content' => $composer . $activity,
