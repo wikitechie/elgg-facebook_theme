@@ -43,15 +43,11 @@ $db_prefix = elgg_get_config('dbprefix');
 			array_push($new_items, $new_item[0]);
 			$reserve = $key;
 			
-			echo ">> $key, $guid<br>";		
-
 			foreach($items as $k => $t) if (($k != $reserve) && (!in_array($k, $banned))){
-				if ($t->object_guid == $guid){
-					echo "$k: ".$guid." banned <br>";
+				if ($t->object_guid == $guid){					
 					array_push($banned, $k);			
 				} 				
-			} 
-			echo "===<br>";						
+			}									
 		} 
 		
 		else
