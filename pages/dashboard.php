@@ -29,14 +29,34 @@ $db_prefix = elgg_get_config('dbprefix');
 
 	$options['count'] = FALSE;
 	$items = elgg_get_river($options);
-		
-	foreach ($items as $key => $item){
-		
+	$new_items = array();
+	
+	$banned = array();
+	
+	foreach ($items as $key => $item) if (!in_array($key, $banned)){		
+		if($item->action_type == 'comment'){
+			$guid = $item->object_guid;
+			$new_item = elgg_get_river(array(
+				'object_guids'=>$guid,
+				'action_types'=>'create',
+			));	
+			array_push($new_items, $new_item[0]);
+			$reserve = $key;
 			
+			foreach($items as $k => $t) if (($k != $reserve) && (!in_array($k, $banned))){
+				if ($t->object_guid == $guid){					
+					array_push($banned, $k);			
+				} 				
+			}									
+		} 
+		
+		else
+			array_push($new_items, $items[$key]);	
+						
 	}
 
 	$options['count'] = $count;
-	$options['items'] = $items;
+	$options['items'] = $new_items;
 
 $activity = elgg_view('page/components/list', $options);
 
