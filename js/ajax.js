@@ -88,13 +88,21 @@ $(document).ready(function() {
 				'formObj':formObj,
 				success:function(data) {
 					$(this.formObj).prev().remove();
-					$(this.formObj).prev().append($(data).children().first());
+					if ($(formObj).prev().length == 0) {
+						$(formObj).before($(data));
+					}
+					else {
+						data = $(data).children().first();
+						$(formObj).prev().append(data);
+					}
+					$(formObj).find("input[type='text']").val("");
+						
 				}
 			});
 		},
 		error: function() {
 			$(this).removeClass("elg-ajax-loader");
-			
+			//TODO Make error logic
 		}
 	});
 });
