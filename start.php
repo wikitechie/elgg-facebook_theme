@@ -680,22 +680,13 @@ function facebook_theme_river_menu_handler($hook, $type, $items, $params) {
 			if (!elgg_annotation_exists($object->getGUID(), 'likes')) {
 				// user has not liked this yet
 				$options = array(
-                
-//              Before Tamer-Shlash's Modification
-//					'name' => 'like',
-//					'href' => "action/likes/add?guid={$object->getGUID()}",
-//					'text' => elgg_echo('likes:likethis'),
-//					'is_action' => true,
-//					'priority' => 100,
-
 					'name' => 'like',
 					'href' => "#action",
 					'text' => elgg_echo('likes:likethis'),
                     'data-action' => 'likes/add',
                     'data-guid' => "{$object->getGUID()}",
-                    'data-dest' => "item-river-{$item->id}",
-                    'data-view' => 'river/getItem',
-                    'data-replace' => 'true',
+                    'data-dest' => "#item-river-{$item->id}",
+                    'data-view' => 'river/getitem',
 					'priority' => 100,
 
 				);
@@ -707,22 +698,13 @@ function facebook_theme_river_menu_handler($hook, $type, $items, $params) {
 					'annotation_owner_guid' => elgg_get_logged_in_user_guid()
 				));
 				$options = array(
-                
-//                Before Tamer Shlash's Modification
-//					'name' => 'like',
-//					'href' => "action/likes/delete?annotation_id={$likes[0]->id}",
-//					'text' => elgg_echo('likes:remove'),
-//					'is_action' => true,
-//					'priority' => 100,
-
 					'name' => 'like',
 					'href' => "#action",
 					'text' => elgg_echo('likes:remove'),
                     'data-action' => 'likes/delete',
                     'data-guid' => "{$object->getGUID()}",
-                    'data-dest' => "item-river-{$item->id}",
-                    'data-view' => 'river/getItem',
-                    'data-replace' => 'true',
+                    'data-dest' => "#item-river-{$item->id}",
+                    'data-view' => 'river/getitem',
 					'priority' => 100,
 				);
 			}

@@ -46,7 +46,7 @@ $(document).ready(function() {
 			'success'	: function(data) {
 				if (hide_selector != undefined)
 					$(hide_selector).hide();
-				$(dest).replaceWith($(data))
+				$(dest).replaceWith($(data));
 			}
 		});
 		return false;
