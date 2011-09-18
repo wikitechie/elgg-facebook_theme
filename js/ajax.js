@@ -19,33 +19,90 @@ elgg.view = function(name, options) {
 	var url = elgg.normalize_url('ajax/view/'+name);
 	if (elgg.isNullOrUndefined(options.success)) {
 		options.manipulationMethod = options.manipulationMethod || 'html';
-		var custom_success = options.success || elgg.nullFunction;
 		options.success = function(data) {
-			$(options.target)[options.manipulationMethod](data);
-			custom_success(data);
+			if (options.replace == "true")
+				$(options.target).replaceWith($(data));
+			else
+				$(options.target)[options.manipulationMethod](data);
 		};
 	}
 	elgg.get(url, options);
 };
-
-$("a[href='#action']").click(function() {
-	var guid	= $(this).attr('data-guid');
-	var action	= $(this).attr('data-action');
-	var dest	= $(this).attr('data-dest');
-	var view	= $(this).attr('data-view');
-	var id		= dest.match(/(.*)-(\d+)/)[2];
-	elgg.action(action,{
-		'data':{
-			'guid':guid
+$(document).ready(function() {
+	$("a[href='#view']").click(function() {
+		var guid			= $(this).attr('data-guid');
+		var view			= $(this).attr('data-view');
+		var annotation_name	= $(this).attr('data-annotation_name');
+		var dest			= $(this).attr('data-dest');
+		var replace			= $(this).attr('data-replace');
+		var hide_selector	= $(this).attr('data-hide');
+		$(dest).html("<div class='elgg-ajax-loader'></div>");
+		elgg.view(view,{
+			'data':{
+				'guid':guid,
+				'annotation_name':annotation_name
+			},
+			'replace'	: replace,
+			'success'	: function(data) {
+				if (hide_selector != undefined)
+					$(hide_selector).hide();
+				$(dest).replaceWith($(data));
+			}
+		});
+		return false;
+	});
+	
+	$("a[href='#action']").click(function() {
+		var guid	= $(this).attr('data-guid');
+		var action	= $(this).attr('data-action');
+		var dest	= $(this).attr('data-dest');
+		var view	= $(this).attr('data-view');
+		var id		= dest.match(/(.*)-(\d+)/)[2];
+		elgg.action(action,{
+			'data':{
+				'guid':guid
+			},
+			'success':function() {
+				elgg.view(view,{
+					data:{
+						'id': id
+					},
+					'target': $(dest)
+				});
+			}
+		});
+		return false;
+	});
+	$("form.elgg-form-comments-add").ajaxForm({
+		beforeSubmit: function(arr,formObj,options) {
+			$(formObj).before($("<div class='elgg-ajax-loader' ></div>"));
 		},
-		'success':function() {
-			elgg.view(view,{
+		success: function(responseText, statusText, xhr, formObj) {
+			var guid = $(formObj).find("input[name='entity_guid']").val();
+			elgg.view('annotation/getannotations',{
 				data:{
-					'id': id
+					'guid':guid,
+					'limit': 1,
+					'annotation_name': 'generic_comment'
 				},
-				'target': $(dest)
+				'formObj':formObj,
+				success:function(data) {
+					$(this.formObj).prev().remove();
+					if ($(formObj).prev().length == 0) {
+						$(formObj).before($(data));
+					}
+					else {
+						data = $(data).children().first();
+						$(formObj).prev().append(data);
+					}
+					$(formObj).find("input[type='text']").val("");
+						
+				}
 			});
+		},
+		error: function() {
+			$(this).removeClass("elg-ajax-loader");
+			//TODO Make error logic
 		}
 	});
-	return false;
 });

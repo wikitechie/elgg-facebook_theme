@@ -29,8 +29,14 @@ if ($comments) {
 
 	if ($comment_count > count($comments)) {
 		$link = elgg_view('output/url', array(
-			'href' => $object->getURL(),
+			'href' => "#view",
 			'text' => elgg_echo('river:comments:all', array($comment_count)),
+			'data-view' => 'annotation/getannotations',
+			'data-dest' => '#item-river-' . $item->id . ' .elgg-river-comments',
+			'data-annotation_name' => 'generic_comment',
+			'data-guid'	=> $item->object_guid,
+			'data-replace'=> "true",
+			'data-hide'	=> "#item-river-" . $item->id . ' .elgg-river-participation.elgg-image-block'
 		));
 		
 		echo elgg_view_image_block(elgg_view_icon('speech-bubble-alt'), $link, array('class' => 'elgg-river-participation'));

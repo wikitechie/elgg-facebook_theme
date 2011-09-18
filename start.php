@@ -681,10 +681,14 @@ function facebook_theme_river_menu_handler($hook, $type, $items, $params) {
 				// user has not liked this yet
 				$options = array(
 					'name' => 'like',
-					'href' => "action/likes/add?guid={$object->getGUID()}",
+					'href' => "#action",
 					'text' => elgg_echo('likes:likethis'),
-					'is_action' => true,
+                    'data-action' => 'likes/add',
+                    'data-guid' => "{$object->getGUID()}",
+                    'data-dest' => "#item-river-{$item->id}",
+                    'data-view' => 'river/getitem',
 					'priority' => 100,
+
 				);
 			} else {
 				// user has liked this
@@ -695,9 +699,12 @@ function facebook_theme_river_menu_handler($hook, $type, $items, $params) {
 				));
 				$options = array(
 					'name' => 'like',
-					'href' => "action/likes/delete?annotation_id={$likes[0]->id}",
+					'href' => "#action",
 					'text' => elgg_echo('likes:remove'),
-					'is_action' => true,
+                    'data-action' => 'likes/delete',
+                    'data-guid' => "{$object->getGUID()}",
+                    'data-dest' => "#item-river-{$item->id}",
+                    'data-view' => 'river/getitem',
 					'priority' => 100,
 				);
 			}
