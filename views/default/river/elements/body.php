@@ -60,7 +60,7 @@ if ($container instanceof ElggGroup && $container->guid != elgg_get_page_owner_g
 
 if (elgg_instanceof($container,'object','wiki') && !elgg_instanceof($object,'object','wikiactivity')){
 	$wiki_link = elgg_view('output/url', array(
-		'href' => $container->url,
+		'href' => $container->getURL(),
 		'text' => $container->title,
 		'class' => 'elgg-river-object',
 		'target' => '_blank'
@@ -69,11 +69,18 @@ if (elgg_instanceof($container,'object','wiki') && !elgg_instanceof($object,'obj
 	$wiki_string = elgg_echo('river:onwikiwall', array($wiki_link));
 }
 
+if(($context = elgg_get_context()) == 'front'){
 echo <<<RIVER
-<div class="elgg-river-summary">$summary $group_string $wiki_string</div>
-$message
-$attachments
-<span class="elgg-river-timestamp">$timestamp</span>
-$menu
-$responses
+	<div class="elgg-river-summary">$summary $group_string $wiki_string<span class="elgg-river-timestamp">($timestamp)</span></div>
+	$message	
+RIVER;
+}
+else
+echo <<<RIVER
+	<div class="elgg-river-summary">$summary $group_string $wiki_string</div>
+	$message and $context
+	$attachments
+	<span class="elgg-river-timestamp">$timestamp</span>
+	$menu
+	$responses
 RIVER;
