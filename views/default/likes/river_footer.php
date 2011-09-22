@@ -4,7 +4,7 @@
  *
  * @uses $vars['entity']
  */
-
+echo elgg_view('js/river_footer',array( 'id'=>$vars['item']->id ));
 if (!$vars['item'] instanceof ElggRiverItem || $vars['item']->annotation_id) {
 	return true;
 }

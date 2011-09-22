@@ -52,27 +52,6 @@ $(document).ready(function() {
 		return false;
 	});
 	
-	$("a[href='#action']").click(function() {
-		var guid	= $(this).attr('data-guid');
-		var action	= $(this).attr('data-action');
-		var dest	= $(this).attr('data-dest');
-		var view	= $(this).attr('data-view');
-		var id		= dest.match(/(.*)-(\d+)/)[2];
-		elgg.action(action,{
-			'data':{
-				'guid':guid
-			},
-			'success':function() {
-				elgg.view(view,{
-					data:{
-						'id': id
-					},
-					'target': $(dest)
-				});
-			}
-		});
-		return false;
-	});
 	$("form.elgg-form-comments-add").ajaxForm({
 		beforeSubmit: function(arr,formObj,options) {
 			$(formObj).before($("<div class='elgg-ajax-loader' ></div>"));
