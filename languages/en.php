@@ -41,4 +41,6 @@ add_translation('en', array(
 	'settings:user' => 'Account Settings',
 	
 	'composer:prompt' => 'Share',
+	
+	'context:ondashboard' => ' On dashboard '
 ));

@@ -75,12 +75,14 @@ echo <<<RIVER
 	$message	
 RIVER;
 }
-else
+else {
+	$context = elgg_echo("context:on$context");
 echo <<<RIVER
 	<div class="elgg-river-summary">$summary $group_string $wiki_string</div>
-	$message and $context
+	$message $context
 	$attachments
 	<span class="elgg-river-timestamp">$timestamp</span>
 	$menu
 	$responses
 RIVER;
+}
