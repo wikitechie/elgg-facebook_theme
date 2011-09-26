@@ -79,7 +79,7 @@ else {
 	$context = elgg_echo("context:on$context");
 echo <<<RIVER
 	<div class="elgg-river-summary">$summary $group_string $wiki_string</div>
-	$message $context
+	$message
 	$attachments
 	<span class="elgg-river-timestamp">$timestamp</span>
 	$menu
